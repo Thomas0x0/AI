@@ -59,7 +59,7 @@ def main():
 	while True:
 		# for message in messages:
 		responce = requests.post(url + data + "Hello!")
-		sleep(90)
+		sleep(10)
 
 # greet_bot = BotHandler(token)  
 
