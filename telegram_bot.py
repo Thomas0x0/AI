@@ -5,11 +5,11 @@ import requests
 from time import sleep
 from datetime import datetime
 
-while (datetime.now().hour != 0 and
-		datetime.now().minute != 0):
-	sleep(60)
+# while (datetime.now().hour != 0 and
+# 		datetime.now().minute != 0):
+# 	sleep(60)
 
-token = "615432346:AAF5DadZtgo8isAWdNyXaC3oy3QtzAjwphE"
+token = "615432346:AAF5DadZtgo8isAWdNyXaC3oy3QtzAjwphE/"
 url = "https://api.telegram.org/bot" + token
 chat_id = "561706344"
 messages = ["Good morning", "Good afternoon",
@@ -17,13 +17,13 @@ messages = ["Good morning", "Good afternoon",
 data = "sendMessage?chat_id={}&text=".format(chat_id)
 # os.system("sudo systemctl start tor")
 # time.sleep(10)
-def get_tor_session():
-	session = requests.session()
-	session.proxies = {"http" : "socks5://127.0.0.1:9050",
-						"https": "socks5://127.0.0.1:9050"}
-	return session
+# def get_tor_session():
+# 	session = requests.session()
+# 	session.proxies = {"http" : "socks5://127.0.0.1:9050",
+# 						"https": "socks5://127.0.0.1:9050"}
+# 	return session
 
-session = get_tor_session()
+# session = get_tor_session()
 
 # class BotHandler():
 
@@ -57,9 +57,9 @@ session = get_tor_session()
 
 def main():
 	while True:
-		for message in messages:
-			responce = session.post(url + data + message)
-			sleep(90)
+		# for message in messages:
+		responce = requests.post(url + data + "Hello!")
+		sleep(90)
 
 # greet_bot = BotHandler(token)  
 
