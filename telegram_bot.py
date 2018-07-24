@@ -59,7 +59,7 @@ def main():
 	while True:
 		for message in messages:
 			responce = session.post(url + data + message)
-			sleep(21600)
+			sleep(90)
 
 # greet_bot = BotHandler(token)  
 
