@@ -3,15 +3,13 @@
 
 import requests
 import schedule
-from time import sleep
-from datetime import datetime
+# from time import sleep
+# from datetime import datetime
 
-token = "615432346:AAF5DadZtgo8isAWdNyXaC3oy3QtzAjwphE/"
-url = "https://api.telegram.org/bot" + token
-chat_id = "561706344"
-messages = ["Good morning", "Good afternoon",
-			"Good evening", "Good night"]
-data = "sendMessage?chat_id={}&text=".format(chat_id)
+url = "https://api.telegram.org/bot615432346:AAF5DadZtgo8isAWdNyXaC3oy3QtzAjwphE/"
+# messages = ["Good morning", "Good afternoon",
+# 			"Good evening", "Good night"]
+data = "sendMessage?chat_id=561706344&text="
 # os.system("sudo systemctl start tor")
 # time.sleep(10)
 # def get_tor_session():
@@ -52,11 +50,11 @@ data = "sendMessage?chat_id={}&text=".format(chat_id)
 	# global session
 	
 
-def main(text):
-	# while True:
-		# for message in messages:
-	responce = requests.post(url + data + text)
-# greet_bot = BotHandler(token)  
+# def main(text):
+# 	# while True:
+# 		# for message in messages:
+# 	responce = requests.post(url + data + text)
+# # greet_bot = BotHandler(token)  
 
 def good_morning():
 	responce = requests.post(url + data + "Good morning!")
