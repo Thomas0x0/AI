@@ -62,6 +62,7 @@ def good_afternoon():
 	responce = requests.post(url + data + "Good afternoon!")
 
 def good_evening():
+	print("Function is working")
 	responce = requests.post(url + data + "Good evening!")
 
 def good_night():
@@ -69,7 +70,7 @@ def good_night():
 
 # schedule.every().day.at("06:00").do(good_morning)
 # schedule.every().day.at("12:00").do(good_afternoon)
-schedule.every().day.at("18:35").do(good_evening)
+schedule.every().day.at("18:50").do(good_evening)
 # schedule.every().day.at("00:00").do(good_night)
 
 def main():
