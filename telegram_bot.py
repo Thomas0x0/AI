@@ -69,7 +69,7 @@ def good_night():
 
 # schedule.every().day.at("06:00").do(good_morning)
 # schedule.every().day.at("12:00").do(good_afternoon)
-schedule.every(10).minutes.do(good_evening)
+schedule.every().day.at("18:35").do(good_evening)
 # schedule.every().day.at("00:00").do(good_night)
 
 def main():
