@@ -76,7 +76,8 @@ schedule.every().day.at("18:50").do(good_evening)
 def main():
 	while True:
 		schedule.run_pending()
-		sleep(10)
+		sleep(30)
+		print("Logs test")
 #     new_offset = None
 
 #     while True:
