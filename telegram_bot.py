@@ -67,15 +67,15 @@ def good_evening():
 def good_night():
 	responce = requests.post(url + data + "Good night!")
 
-schedule.every().day.at("06:00").do(good_morning)
-schedule.every().day.at("12:00").do(good_afternoon)
-schedule.every().day.at("18:00").do(good_evening)
-schedule.every().day.at("00:00").do(good_night)
+# schedule.every().day.at("06:00").do(good_morning)
+# schedule.every().day.at("12:00").do(good_afternoon)
+schedule.every(10).minutes.do(good_evening)
+# schedule.every().day.at("00:00").do(good_night)
 
 def main():
 	while True:
 		schedule.run_pending()
-		sleep(1)
+		sleep(10)
 #     new_offset = None
 
 #     while True:
