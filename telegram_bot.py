@@ -58,6 +58,17 @@ def main(text):
 	responce = requests.post(url + data + text)
 # greet_bot = BotHandler(token)  
 
+def good_morning():
+	responce = requests.post(url + data + "Good morning!")
+
+def good_afternoon():
+	responce = requests.post(url + data + "Good afternoon!")
+
+def good_evening():
+	responce = requests.post(url + data + "Good evening!")
+
+def good_night():
+	responce = requests.post(url + data + "Good night!")
 
 # def main():  
 #     new_offset = None
@@ -88,7 +99,7 @@ def main(text):
 
 if __name__ == '__main__':  
 	while True:
-		schedule.every().day.at("06:00").do(main("Good morning!"))
-		schedule.every().day.at("12:00").do(main("Good afternoon!"))
-		schedule.every().day.at("18:00").do(main("Good evening!"))
-		schedule.every().day.at("00:00").do(main("Good night!"))
+		schedule.every().day.at("06:00").do(good_morning)
+		schedule.every().day.at("12:00").do(good_afternoon)
+		schedule.every().day.at("18:00").do(good_evening)
+		schedule.every().day.at("00:00").do(good_night)
