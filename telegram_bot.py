@@ -2,12 +2,9 @@
 #! -*- coding: utf-8 -*-
 
 import requests
+import schedule
 from time import sleep
 from datetime import datetime
-
-# while (datetime.now().hour != 0 and
-# 		datetime.now().minute != 0):
-# 	sleep(60)
 
 token = "615432346:AAF5DadZtgo8isAWdNyXaC3oy3QtzAjwphE/"
 url = "https://api.telegram.org/bot" + token
@@ -55,12 +52,10 @@ data = "sendMessage?chat_id={}&text=".format(chat_id)
 	# global session
 	
 
-def main():
-	while True:
+def main(text):
+	# while True:
 		# for message in messages:
-		responce = requests.post(url + data + "Hello!")
-		sleep(600)
-
+	responce = requests.post(url + data + text)
 # greet_bot = BotHandler(token)  
 
 
@@ -92,4 +87,8 @@ def main():
 #         new_offset = last_update_id + 1
 
 if __name__ == '__main__':  
-        main()
+	while True:
+        schedule.every().day.at("06:00").do(main("Good morning!"))
+        schedule.every().day.at("12:00").do(main("Good afternoon!"))
+        schedule.every().day.at("18:00").do(main("Good evening!"))
+        schedule.every().day.at("00:00").do(main("Good night!"))
