@@ -56,27 +56,35 @@ data = "sendMessage?chat_id=561706344&text="
 # # greet_bot = BotHandler(token)  
 
 def good_morning():
+	print("Good morning is working!")
 	responce = requests.post(url + data + "Good morning!")
 
 def good_afternoon():
+	print("Good afternoon function is working!")
 	responce = requests.post(url + data + "Good afternoon!")
 
 def good_evening():
-	print("Function is working")
+	print("Good evening function is working")
 	responce = requests.post(url + data + "Good evening!")
 
 def good_night():
+	print("Good night function is working!")
 	responce = requests.post(url + data + "Good night!")
 
-# schedule.every().day.at("06:00").do(good_morning)
-# schedule.every().day.at("12:00").do(good_afternoon)
-schedule.every().day.at("19:00").do(good_evening)
-# schedule.every().day.at("00:00").do(good_night)
+schedule.every().day.at("03:00").do(good_morning)
+schedule.every().day.at("09:00").do(good_afternoon)
+schedule.every().day.at("15:00").do(good_evening)
+schedule.every().day.at("21:00").do(good_night)
 
 def main():
 	while True:
-		schedule.run_pending()
-		sleep(30)
+		try:
+			schedule.run_pending()
+			sleep(60)
+		except Exception:
+			print(Exception)
+			requests.post(url + data + Exception)
+			exit()
 #     new_offset = None
 
 #     while True:
