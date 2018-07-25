@@ -3,7 +3,7 @@
 
 import requests
 import schedule
-# from time import sleep
+from time import sleep
 # from datetime import datetime
 
 url = "https://api.telegram.org/bot615432346:AAF5DadZtgo8isAWdNyXaC3oy3QtzAjwphE/"
@@ -19,7 +19,6 @@ data = "sendMessage?chat_id=561706344&text="
 # 	return session
 
 # session = get_tor_session()
-
 # class BotHandler():
 
 # 	def __init__(self, token):
@@ -68,7 +67,15 @@ def good_evening():
 def good_night():
 	responce = requests.post(url + data + "Good night!")
 
-# def main():  
+schedule.every().day.at("06:00").do(good_morning)
+schedule.every().day.at("12:00").do(good_afternoon)
+schedule.every().day.at("18:00").do(good_evening)
+schedule.every().day.at("00:00").do(good_night)
+
+def main():
+	while True:
+		schedule.run_pending()
+		sleep(1)
 #     new_offset = None
 
 #     while True:
@@ -95,9 +102,5 @@ def good_night():
 
 #         new_offset = last_update_id + 1
 
-if __name__ == '__main__':  
-	while True:
-		schedule.every().day.at("06:00").do(good_morning)
-		schedule.every().day.at("12:00").do(good_afternoon)
-		schedule.every().day.at("18:00").do(good_evening)
-		schedule.every().day.at("00:00").do(good_night)
+if __name__ == '__main__':
+	main()
