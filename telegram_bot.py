@@ -16,6 +16,9 @@ def get_updates():
 	global bot_url, data
 	request_json = requests.get(bot_url + "getUpdates",
 						 data=data).json()
+	if not request_json["result"]:
+		sleep(1)
+		return
 
 	for update in request_json["result"]:
 		data["chat_id"] = update["chat"]["id"]
@@ -76,7 +79,7 @@ def main():
 			# sleep(60)
 		except Exception:
 			print(Exception)
-			send_message(dev_chat_id, Exception)
+			send_message(dev_chat_id, str(Exception))
 			exit()
 
 
