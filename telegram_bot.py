@@ -18,8 +18,8 @@ class Bot():
 
 	def create_session(self):
 		self.session = requests.session()
-		self.session.proxies = {"http": "socks5://127.0.0.1:9050",
-							"https": "socks5://127.0.0.1:9050"}
+		# self.session.proxies = {"http": "socks5://127.0.0.1:9050",
+		# 					"https": "socks5://127.0.0.1:9050"}
 
 	def get_updates(self):
 		method = self.url + "getUpdates" 
