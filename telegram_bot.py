@@ -78,8 +78,8 @@ def main():
 			# schedule.run_pending()
 			# sleep(60)
 		except Exception:
-			print(Exception)
-			send_message(dev_chat_id, str(Exception))
+			print(repr(Exception))
+			send_message(dev_chat_id, repr(Exception))
 			exit()
 
 
