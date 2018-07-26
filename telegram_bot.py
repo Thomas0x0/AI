@@ -57,7 +57,7 @@ def greetings(time):
 
 def send_message(chat_id, text):
 	global bot_url
-	bot_url = "sendMessage?chat_id={}&text={}".format(
+	bot_url += "sendMessage?chat_id={}&text={}".format(
 		chat_id, text)
 	responce = requests.post(bot_url)
 	if responce.status_code == 200:
