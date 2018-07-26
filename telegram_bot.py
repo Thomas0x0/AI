@@ -21,7 +21,7 @@ def get_updates():
 		return
 
 	for update in request_json["result"]:
-		data["chat_id"] = update["chat"]["id"]
+		data["chat_id"] = update["message"]["chat"]["id"]
 
 		if not "message" in update or "text" in update["message"]:
 			responce = "Извините, я пока не распознаю НЕ текст."
@@ -77,9 +77,9 @@ def main():
 			get_updates()
 			# schedule.run_pending()
 			# sleep(60)
-		except Exception:
-			print(repr(Exception))
-			send_message(dev_chat_id, repr(Exception))
+		except Exception as error:
+			print(repr(error))
+			send_message(dev_chat_id, repr(error))
 			exit()
 
 
