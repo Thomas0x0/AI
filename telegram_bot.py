@@ -65,8 +65,9 @@ tns_bot.create_session()
 while True:
 	tns_bot.get_updates()
 	tns_bot.updates_handling()
-	tns_bot.ai_response()
-	tns_bot.send_message()
+	if tns_bot.updates:
+		tns_bot.ai_response()
+		tns_bot.send_message()
 # dev_chat_id = "561706344"
 # site = "https://api.telegram.org/bot"
 # token = ""
