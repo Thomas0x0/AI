@@ -39,7 +39,8 @@ class Bot():
 					self.request = (update['message']['chat']['id'],
 								update['message']['text'])
 				else: # If message's type isn't text
-					ai_answer = 'Извини, я не понимаю'
+					self.request = (update['message']['chat']['id'],
+						'Извини, я не понимаю')
 
 	def ai_response(self):
 		request = ApiAI("de46c0b6430741018a4c3aa85083ddc9").text_request()
