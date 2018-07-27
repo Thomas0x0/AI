@@ -51,9 +51,13 @@ class Bot():
 		response_json = json.loads(response)
 		response = response_json['result']['fulfillment']['speech']
 		self.response = response
+		return response
 
-	def send_message(self):
-		params = {"chat_id": self.request[0], "text": self.response}
+	def send_message(self, text=None):
+		if text:
+			params = {"chat_id": self.request[0], "text": text}
+		else:
+			params = {'chat_id': self.request[0], 'text': text}
 		self.session.post(self.url + "sendMessage", data=params)
 
 
@@ -65,9 +69,11 @@ tns_bot.create_session()
 while True:
 	tns_bot.get_updates()
 	tns_bot.updates_handling()
-	if tns_bot.updates:
-		tns_bot.ai_response()
-		tns_bot.send_message()
+	if tns_bot.updates: # If there are updates on the server
+		if tns_bot.ai_response(): # If AI has answer
+			tns_bot.send_message()
+		else:
+			tns_bot.send_message("Извини, я пока не распознаю такой текст")
 # dev_chat_id = "561706344"
 # site = "https://api.telegram.org/bot"
 # token = ""
