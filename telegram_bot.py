@@ -2,10 +2,11 @@
 #! -*- coding: utf-8 -*-
 
 import requests
-import schedule
+# import schedule
 import traceback
-import apiai, json
-from time import sleep
+import json
+from apiai import ApiAI
+# from time import sleep
 
 class Bot():
 
@@ -15,6 +16,8 @@ class Bot():
 		self.botname = botname
 		self.url = "https://api.telegram.org/" + "bot" + token + '/'
 		self.params = {"offset" : 1, "timeout": 30}
+		self.methods = {'getUpdates': self.url + 'getUpdates',
+					    'sendMessage': self.url + 'sendMessage'}
 
 	def create_session(self):
 		self.session = requests.session()
@@ -22,37 +25,34 @@ class Bot():
 		# 					"https": "socks5://127.0.0.1:9050"}
 
 	def get_updates(self):
-		method = self.url + "getUpdates" 
-		request = self.session.get(method, data=self.params)
-		self.data = request.json()["result"]
-		if not self.data:
-			self.data = None
+		request = self.session.get(self.methods['getUpdates'],
+								 data=self.params)
+		self.updates = request.json()['result']
+		if not self.updates: # If no updates, set them to None
+			self.updates = None
 
 	def updates_handling(self):
-		if self.data:
-			for update in self.data:
-				self.params["offset"] = update["update_id"] + 1
-				if "text" in update["message"]:
-					message = update["message"]["text"]
-					answer = self.ai_send(message)
-					chat_id = update["message"]["chat"]["id"]
-					self.send_message(chat_id, answer)
-				else:
-					self.send_message(chat_id, "Sorry, but I can't handle non-text")
-		else:
-			return
+		if self.updates:
+			for update in self.updates:
+				self.params['offset'] = update['update_id'] + 1
+				if "text" in update["message"]: # If message's type is text
+					self.request = (update['message']['chat']['id'],
+								update['message']['text'])
+				else: # If message's type isn't text
+					ai_answer = 'Извини, я не понимаю'
 
-	def ai_send(self, text):
-		request = apiai.ApiAI("de46c0b6430741018a4c3aa85083ddc9").text_request()
+	def ai_response(self):
+		request = ApiAI("de46c0b6430741018a4c3aa85083ddc9").text_request()
 		request.lang = 'ru'
 		request.session_id = 'test_network_bot'
-		request.query = text
-		response_json = json.loads(request.getresponse().read().decode('utf-8'))
+		request.query = self.request[1]
+		response = request.getresponse().read().decode('utf-8')
+		response_json = json.loads(response)
 		response = response_json['result']['fulfillment']['speech']
-		return response
+		self.response = response
 
-	def send_message(self, chat_id, text):
-		params = {"chat_id": chat_id, "text": text}
+	def send_message(self):
+		params = {"chat_id": self.request[0], "text": self.response}
 		self.session.post(self.url + "sendMessage", data=params)
 
 
@@ -64,6 +64,8 @@ tns_bot.create_session()
 while True:
 	tns_bot.get_updates()
 	tns_bot.updates_handling()
+	tns_bot.ai_response()
+	tns_bot.send_message()
 # dev_chat_id = "561706344"
 # site = "https://api.telegram.org/bot"
 # token = ""
