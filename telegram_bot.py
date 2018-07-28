@@ -35,30 +35,35 @@ class Bot():
 		if self.updates:
 			for update in self.updates:
 				self.params['offset'] = update['update_id'] + 1
+				user_id = update['message']['chat']['id']
 				if "text" in update["message"]: # If message's type is text
-					self.request = (update['message']['chat']['id'],
-								update['message']['text'])
+					response = self.ai_response(update['message']['text'])
+					if response:
+						self.send_message(user_id, response)
+					else:
+						self.send_message(user_id, 
+							'Извини, такой текст не понимаю')
+				elif 'photo' in update['message']:
+					self.send_message(user_id,
+						'Извини, фотографии не распознаю')
 				else: # If message's type isn't text
-					self.request = (update['message']['chat']['id'],
+					self.send_message(user_id,
 						'Извини, я не понимаю')
 
-	def ai_response(self):
+	def ai_response(self, text):
 		request = ApiAI("de46c0b6430741018a4c3aa85083ddc9").text_request()
 		request.lang = 'ru'
 		request.session_id = 'test_network_bot'
-		request.query = self.request[1]
-		response = request.getresponse().read().decode('utf-8')
-		response_json = json.loads(response)
+		request.query = text
+		response_raw = request.getresponse().read().decode('utf-8')
+		response_json = json.loads(response_raw)
 		response = response_json['result']['fulfillment']['speech']
 		self.response = response
 		return response
 
-	def send_message(self, text=None):
-		if text:
-			params = {"chat_id": self.request[0], "text": text}
-		else:
-			params = {'chat_id': self.request[0], 'text': text}
-		self.session.post(self.url + "sendMessage", data=params)
+	def send_message(self, chat_id, text):
+		params = {"chat_id": chat_id, "text": text}
+		self.session.post(self.methods['sendMessage'], data=params)
 
 
 tns_bot = Bot("615432346:AAF5DadZtgo8isAWdNyXaC3oy3QtzAjwphE",
@@ -69,11 +74,6 @@ tns_bot.create_session()
 while True:
 	tns_bot.get_updates()
 	tns_bot.updates_handling()
-	if tns_bot.updates: # If there are updates on the server
-		if tns_bot.ai_response(): # If AI has answer
-			tns_bot.send_message()
-		else:
-			tns_bot.send_message("Извини, я пока не распознаю такой текст")
 # dev_chat_id = "561706344"
 # site = "https://api.telegram.org/bot"
 # token = ""
