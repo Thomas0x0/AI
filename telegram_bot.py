@@ -92,16 +92,30 @@ class Bot():
 		params = {"chat_id": chat_id, "text": text}
 		self.session.post(self.methods['sendMessage'], data=params)
 
+	def dispatch(self, text):
+		cursor.execute("SELECT chat_id FROM telegram_users -- WHERE chat_id != 561706344")
+		for chat_id in cursor.fetchall():
+			self.send_message(chat_id[0], text)
+
+	def good_morning_creator(self):
+		cursor.execute("SELECT id FROM telegram_users DESC LIMIT 1")
+		records_amount = cursor.fetchall()[0][0]
+		self.send_message(561706344,
+			'Доброе утро, создатель! На данный момент в вашей базе данных {} записей'.format(records_amount))
 
 tns_bot = Bot("615432346:AAF5DadZtgo8isAWdNyXaC3oy3QtzAjwphE",
 			"TNS(Test Network Speed)",
 			"network_speed_bot")
 tns_bot.create_session()
 
-schedule.every().day.at('03:00').do(tns_bot.send_message, 561706344, 'Доброе утро!')
-schedule.every().day.at('09:00').do(tns_bot.send_message, 561706344, 'Добрый день!')
-schedule.every().day.at('15:00').do(tns_bot.send_message, 561706344, 'Добрый вечер!')
+schedule.every().day.at('03:00').do(tns_bot.good_morning_creator)
+schedule.every().day.at('09:00').do(tns_bot.send_message, 561706344, 'Не забывайте покушать!!!')
+schedule.every().day.at('15:00').do(tns_bot.send_message, 561706344, 'Пора прогуляться???')
 schedule.every().day.at('21:00').do(tns_bot.send_message, 561706344, 'Доброй ночи!')
+
+schedule.every().day.at('03:00').do(tns_bot.dispatch, 'Доброе утро!')
+schedule.every().day.at('09:00').do(tns_bot.dispatch, 'Время покушать!')
+schedule.every().day.at('21:00').do(tns_bot.dispatch, 'Доброй ночи!')
 
 def main():
 	while True:
