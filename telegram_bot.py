@@ -3,11 +3,17 @@
 
 import requests
 import schedule
-import traceback
+import sqlite3
 import json
 from apiai import ApiAI
 from multiprocessing import Process
 from time import sleep
+
+conn = sqlite3.connect('users.sqlite')
+cursor = conn.cursor()
+cursor.execute('SELECT chat_id FROM telegram_users')
+user_chat_ids = list(cursor.fetchall()[0])
+
 
 class Bot():
 
@@ -22,8 +28,8 @@ class Bot():
 
 	def create_session(self):
 		self.session = requests.session()
-		# self.session.proxies = {"http": "socks5://127.0.0.1:9050",
-		# 					"https": "socks5://127.0.0.1:9050"}
+		self.session.proxies = {"http": "socks5://127.0.0.1:9050",
+							"https": "socks5://127.0.0.1:9050"}
 
 	def get_updates(self):
 		request = self.session.get(self.methods['getUpdates'],
@@ -36,19 +42,39 @@ class Bot():
 		if self.updates:
 			for update in self.updates:
 				self.params['offset'] = update['update_id'] + 1
-				user_id = update['message']['chat']['id']
+
+				user_chat_id = update['message']['chat']['id']
+				if user_chat_id not in user_chat_ids:
+					user_information = {
+						'user_chat_id': update['message']['from']['id'],
+						'first_name': update['message']['from']['first_name'],
+						'chat_id': user_chat_id
+						}
+					if 'last_name' in update['message']['from']:
+						user_information['last_name'] = update['message']['from']['last_name']
+					else:
+						user_information['last_name'] = None
+					if 'username' in update['message']['from']:
+						user_information['username'] = update['message']['from']['username'] 
+					else:
+						user_information['username'] = None
+					cursor.execute("""INSERT INTO telegram_users
+						VALUES (Null, {0}, '{1}', '{3}', '{4}', {2})""".format(*user_information.values()))
+					conn.commit()
+					user_chat_ids.append(user_chat_id)
+
 				if "text" in update["message"]: # If message's type is text
 					response = self.ai_response(update['message']['text'])
 					if response:
-						self.send_message(user_id, response)
+						self.send_message(user_chat_id, response)
 					else:
-						self.send_message(user_id, 
+						self.send_message(user_chat_id, 
 							'Извини, такой текст не понимаю')
 				elif 'photo' in update['message']:
-					self.send_message(user_id,
+					self.send_message(user_chat_id,
 						'Извини, фотографии не распознаю')
 				else: # If message's type isn't text
-					self.send_message(user_id,
+					self.send_message(user_chat_id,
 						'Извини, я не понимаю')
 
 	def ai_response(self, text):
@@ -91,6 +117,7 @@ proc1 = Process(target=main)
 proc2 = Process(target=main1)
 
 if __name__ == '__main__':
+	# main()
 	proc1.start()
 	proc2.start()
 # dev_chat_id = "561706344"
