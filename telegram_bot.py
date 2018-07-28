@@ -2,11 +2,12 @@
 #! -*- coding: utf-8 -*-
 
 import requests
-# import schedule
+import schedule
 import traceback
 import json
 from apiai import ApiAI
-# from time import sleep
+from multiprocessing import Process
+from time import sleep
 
 class Bot():
 
@@ -71,9 +72,27 @@ tns_bot = Bot("615432346:AAF5DadZtgo8isAWdNyXaC3oy3QtzAjwphE",
 			"network_speed_bot")
 tns_bot.create_session()
 
-while True:
-	tns_bot.get_updates()
-	tns_bot.updates_handling()
+schedule.every().day.at('03:00').do(tns_bot.send_message, 561706344, 'Доброе утро!')
+schedule.every().day.at('09:00').do(tns_bot.send_message, 561706344, 'Добрый день!')
+schedule.every().day.at('15:00').do(tns_bot.send_message, 561706344, 'Добрый вечер!')
+schedule.every().day.at('21:00').do(tns_bot.send_message, 561706344, 'Доброй ночи!')
+
+def main():
+	while True:
+		tns_bot.get_updates()
+		tns_bot.updates_handling()
+
+def main1():
+	while True:
+		schedule.run_pending()
+		sleep(60)
+
+proc1 = Process(target=main)
+proc2 = Process(target=main1)
+
+if __name__ == '__main__':
+	proc1.start()
+	proc2.start()
 # dev_chat_id = "561706344"
 # site = "https://api.telegram.org/bot"
 # token = ""
