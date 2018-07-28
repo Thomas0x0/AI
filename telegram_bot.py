@@ -17,10 +17,8 @@ user_chat_ids = list(cursor.fetchall()[0])
 
 class Bot():
 
-	def __init__(self, token, name, botname):
+	def __init__(self, token):
 		self.token = token
-		self.name = name
-		self.botname = botname
 		self.url = "https://api.telegram.org/" + "bot" + token + '/'
 		self.params = {"offset" : 1, "timeout": 30}
 		self.methods = {'getUpdates': self.url + 'getUpdates',
@@ -28,8 +26,8 @@ class Bot():
 
 	def create_session(self):
 		self.session = requests.session()
-		self.session.proxies = {"http": "socks5://127.0.0.1:9050",
-							"https": "socks5://127.0.0.1:9050"}
+		# self.session.proxies = {"http": "socks5://127.0.0.1:9050",
+		# 					"https": "socks5://127.0.0.1:9050"}
 
 	def get_updates(self):
 		request = self.session.get(self.methods['getUpdates'],
@@ -103,9 +101,7 @@ class Bot():
 		self.send_message(561706344,
 			'Доброе утро, создатель! На данный момент в вашей базе данных {} записей'.format(records_amount))
 
-tns_bot = Bot("615432346:AAF5DadZtgo8isAWdNyXaC3oy3QtzAjwphE",
-			"TNS(Test Network Speed)",
-			"network_speed_bot")
+tns_bot = Bot("615432346:AAF5DadZtgo8isAWdNyXaC3oy3QtzAjwphE")
 tns_bot.create_session()
 
 schedule.every().day.at('03:00').do(tns_bot.good_morning_creator)
