@@ -12,7 +12,7 @@ from time import sleep
 conn = sqlite3.connect('users.sqlite')
 cursor = conn.cursor()
 cursor.execute('SELECT chat_id FROM telegram_users')
-user_chat_ids = list(cursor.fetchall()[0])
+user_chat_ids = [i for i in cursor.fetchall()]
 
 
 class Bot():
