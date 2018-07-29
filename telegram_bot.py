@@ -12,7 +12,7 @@ from time import sleep
 conn = sqlite3.connect('users.sqlite')
 cursor = conn.cursor()
 cursor.execute('SELECT chat_id FROM telegram_users')
-user_chat_ids = [i for i in cursor.fetchall()]
+user_chat_ids = [i[0] for i in cursor.fetchall()]
 
 
 class Bot():
@@ -85,7 +85,7 @@ class Bot():
 
 	def send_message(self, chat_id, text):
 		params = {"chat_id": chat_id, "text": text}
-		self.session.post(self.methods['sendMessage'], data=params)
+		requests.post(self.methods['sendMessage'], data=params)
 
 	def dispatch(self, text):
 		cursor.execute("SELECT chat_id FROM telegram_users WHERE chat_id != 561706344")
