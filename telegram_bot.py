@@ -25,7 +25,7 @@ class Bot():
 					    'sendMessage': self.url + 'sendMessage'}
 
 	def get_updates(self):
-		request = self.requests.get(self.methods['getUpdates'],
+		request = requests.get(self.methods['getUpdates'],
 								 data=self.params)
 		self.updates = request.json()['result']
 		if not self.updates: # If no updates, set them to blank list
