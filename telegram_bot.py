@@ -107,10 +107,10 @@ class Bot():
 				word))
 
 
-def main():
-	while True:
-		tns_bot.get_updates()
-		tns_bot.updates_handling()
+# def main():
+# 	while True:
+# 		tns_bot.get_updates()
+# 		tns_bot.updates_handling()
 
 def main1():
 	while True:
@@ -120,7 +120,7 @@ def main1():
 
 
 if __name__ == '__main__':
-	tns_bot = Bot("615432346:AAF5DadZtgo8isAWdNyXaC3oy3QtzAjwphE")
+	tns_bot = Bot("")
 
 	schedule.every().day.at('03:00').do(tns_bot.good_morning_creator)
 	schedule.every().day.at('09:00').do(tns_bot.send_message, 561706344, 'Не забывайте покушать!!!')
@@ -131,8 +131,12 @@ if __name__ == '__main__':
 	schedule.every().day.at('09:00').do(tns_bot.dispatch, 'Время покушать!')
 	schedule.every().day.at('21:00').do(tns_bot.dispatch, 'Доброй ночи!')
 
-	proc1 = Process(target=main)
+	# proc1 = Process(target=main)
 	proc2 = Process(target=main1)
-	proc1.start()
+	# proc1.start()
+	while True:
+		tns_bot.get_updates()
+		tns_bot.updates_handling()
+
 	proc2.start()
 
